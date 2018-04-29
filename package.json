@@ -1,0 +1,41 @@
+{
+  "name": "eml2markdown",
+  "version": "1.0.0",
+  "description": "Copy and markdown eml file format using Lambda",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "node_modules/gulp/bin/gulp.js",
+    "package": "aws cloudformation package --template-file template.yml --output-template-file packaged-template.yml --s3-bucket $CODE_BUCKET",
+    "deploy": "aws cloudformation deploy --template-file packaged-template.yml --capabilities CAPABILITY_IAM --stack-name dev-compress-$USER --parameter-overrides sourceBucket=$SOURCE_BUCKET destBucket=$DEST_BUCKET transformation=$TRANSFORMATION",
+    "clean": "aws s3 rm s3://amberleaf-email-in2/kbq4fqlmui5et485rrjpn400o8hnptu3ri318ag1.eml && aws s3 rm s3://amberleaf-markdown-out/kbq4fqlmui5et485rrjpn400o8hnptu3ri318ag1.json && rm ./test/kbq4fqlmui5et485rrjpn400o8hnptu3ri318ag1.json",
+    "runnow": "aws s3 cp ./test/kbq4fqlmui5et485rrjpn400o8hnptu3ri318ag1.eml s3://amberleaf-email-in2/kbq4fqlmui5et485rrjpn400o8hnptu3ri318ag1.eml",
+    "check": "aws s3 cp s3://amberleaf-markdown-out/kbq4fqlmui5et485rrjpn400o8hnptu3ri318ag1.json ./test/kbq4fqlmui5et485rrjpn400o8hnptu3ri318ag1.json && open -a Atom ./test/kbq4fqlmui5et485rrjpn400o8hnptu3ri318ag1.json",
+    "ifeallucky": "npm run build && npm run package && npm run deploy && npm run clean && npm run runnow && npm run check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i001962/eml2markdown.git"
+  },
+  "keywords": [
+    "Markdown",
+    "eml",
+    "S3",
+    "Serverless"
+  ],
+  "author": "Kevin McDonald <i001962@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/i001962/eml2markdown/issues"
+  },
+  "homepage": "https://github.com/i001962/eml2markdown#readme",
+  "dependencies": {
+    "eml-format": "^0.5.0",
+    "gm": "^1.23.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-jshint": "^2.1.0",
+    "gulp-zip": "^4.1.0",
+    "jshint": "^2.9.5"
+  }
+}
